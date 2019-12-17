@@ -20,6 +20,7 @@
     "import/imports-first": ["error", "absolute-first"],
     "import/newline-after-import": "error",
     "import/no-cycle": 0,
-    "react/prop-types": ["warn"]
+    "react/prop-types": ["warn"],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   }
 }

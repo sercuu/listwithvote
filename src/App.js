@@ -1,26 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
+import rooterModel from './routeModel';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      {rooterModel.map(item => {
+        return <Route path={item.path} exact component={item.component} key={item.name} />;
+      })}
+      <Route path="/" render={() => <Redirect to="/list" />} />
+    </Switch>
   );
-}
+};
 
 export default App;
