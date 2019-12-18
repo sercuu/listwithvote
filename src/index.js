@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
+import 'semantic-ui-less/semantic.less';
+
 import history from './helpers/history';
+
 import App from './App';
-import './index.css';
+
+import './style/index.scss';
 
 const Root = () => (
   <Router history={history}>
