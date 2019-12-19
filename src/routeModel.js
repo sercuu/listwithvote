@@ -1,11 +1,16 @@
 import { ListContainer } from './container/List/ListContainer';
+import { AddVoteCardContainer } from './container/AddVoteCard/AddVoteCardContainer';
 
 const router = [
   {
     path: '/list',
     name: 'list',
     component: ListContainer,
-    layout: '/admin',
+  },
+  {
+    path: '/add',
+    name: 'Add',
+    component: AddVoteCardContainer,
   },
 ];
 

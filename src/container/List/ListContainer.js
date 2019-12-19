@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, Icon, Button } from 'semantic-ui-react';
 
 const model = [
@@ -34,19 +35,18 @@ export const ListContainer = () => {
   const { Content, Header, Meta } = Card;
   return (
     <section className="cardContainer">
-      <div className="cardSubmitContent">
-        <Button size="big" basic>
+      <div className="cardAddContent">
+        <Link to="/add">
           <Icon name="plus" className="backgroundCover" />
           SUBMIT A LINK
-        </Button>
+        </Link>
       </div>
-      <hr />
       <Card>
         {model.map(cardItem => (
           <Content key={cardItem.id}>
             <div className="cardListContent">
               <div className="cardListContent_viotPoint backgroundCover">
-                <strong>{cardItem.point}</strong>
+                <span>{cardItem.point}</span>
                 <p>POINT</p>
               </div>
               <div>

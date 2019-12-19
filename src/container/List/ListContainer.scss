@@ -1,12 +1,6 @@
 .cardContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  hr {
-    width: 300px;
-    margin-top: 20px;
-  }
+  width: 400px;
+
   .backgroundCover {
     width: 60px;
     height: 60px !important;
@@ -19,18 +13,36 @@
     border: 1px solid #c1c1c1;
     margin-right: 15px !important;
   }
-  .cardSubmitContent {
-    button {
-      width: 300px;
+  .cardAddContent {
+    width: 100%;
+    border-bottom: 3px solid #c1c1c1;
+    padding-bottom: 20px;
+
+    a {
+      border: 1px solid #f1f1f1;
+      padding: 15px;
       display: flex;
       align-items: center;
+      color: #000;
+      font: {
+        family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+        weight: bold;
+        size: 25px;
+      }
     }
   }
   .cardListContent {
     display: flex;
     justify-content: flex-start;
+    padding: 10px 0;
 
     &_viotPoint {
+      span {
+        font: {
+          size: 25px;
+          weight: bold;
+        }
+      }
     }
 
     &_action {
