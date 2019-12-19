@@ -1,4 +1,4 @@
-import { ListContainer } from './container/List/ListContainer';
+import ListContainer from './container/List/ListContainer';
 import { AddVoteCardContainer } from './container/AddVoteCard/AddVoteCardContainer';
 
 const router = [
