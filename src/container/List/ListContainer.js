@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Icon, Button } from 'semantic-ui-react';
+import useGlobalState from '../../context/GlobalContext';
 
 const model = [
   {
@@ -23,16 +24,20 @@ const model = [
   },
 ];
 
-const handleUpVote = () => {
-  console.log('handleupvote');
-};
-
-const handleDownVote = () => {
-  console.log('handleDownvote');
-};
-
 export const ListContainer = () => {
   const { Content, Header, Meta } = Card;
+
+  const { setDoggie } = useGlobalState();
+
+  const handleUpVote = () => {
+    setDoggie({ name: 'asd' });
+    console.log('handleupvote');
+  };
+
+  const handleDownVote = () => {
+    console.log('handleDownvote');
+  };
+
   return (
     <section className="cardContainer">
       <div className="cardAddContent">
