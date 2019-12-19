@@ -1,0 +1,52 @@
+.cardContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  hr {
+    width: 300px;
+    margin-top: 20px;
+  }
+  .backgroundCover {
+    width: 60px;
+    height: 60px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    border: 1px solid #c1c1c1;
+    margin-right: 15px !important;
+  }
+  .cardSubmitContent {
+    button {
+      width: 300px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .cardListContent {
+    display: flex;
+    justify-content: flex-start;
+
+    &_viotPoint {
+    }
+
+    &_action {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+    .header {
+      font-size: 20px;
+    }
+  }
+}

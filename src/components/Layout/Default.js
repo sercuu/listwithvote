@@ -11,9 +11,7 @@ export const Default = ({ children }) => {
       <HeaderContainer />
       <Grid centered>
         <Row>
-          <Column width={4}>
-            <div>{children}</div>
-          </Column>
+          <Column width={12}>{children}</Column>
         </Row>
       </Grid>
     </>
