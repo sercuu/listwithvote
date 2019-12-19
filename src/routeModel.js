@@ -1,5 +1,5 @@
 import { ListContainer } from './container/List/ListContainer';
-import { AddVoteCardContainer } from './container/AddVoteCard/AddVoteCardContainer';
+import { AddVoteCardContainer } from './components/AddVoteCard/AddVoteCard';
 
 const router = [
   {

@@ -1,0 +1,25 @@
+.addVoteCard {
+  width: 400px;
+  &_returnButton {
+    margin: 25px 0;
+    a {
+      color: #000;
+      font: {
+        size: 20px;
+        weight: bolds;
+      }
+    }
+  }
+  &_title {
+    margin: 40px 0;
+  }
+  &_form {
+    label {
+      display: block;
+      margin: 30px 0;
+    }
+    .input {
+      width: 100% !important;
+    }
+  }
+}
