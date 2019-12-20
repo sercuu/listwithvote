@@ -1,25 +1,77 @@
-import React from 'react';
+/* eslint-disable no-param-reassign */
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Icon, Button } from 'semantic-ui-react';
+import { Card, Icon, Button, Pagination } from 'semantic-ui-react';
 
 export const ListContainer = () => {
-  const voteList = () => JSON.parse(window.localStorage.getItem('voteList'));
-  // const [voteList, setVoteList] = useState([localeVoteList]);
+  const localStoragePageableVoteList = JSON.parse(window.localStorage.getItem('pageableVoteList'));
+  const localStorageVoteList = JSON.parse(window.localStorage.getItem('voteList'));
 
-  // const getLocalStorage = () => {
-  //   setVoteList(localStorageVoteList);
-  // };
+  const [voteList, setVoteList] = useState([]);
+  const [totalCount, setPageSize] = useState('');
+  const [paginationActivePage, setActivePage] = useState(1);
 
-  // useEffect(() => {
-  //   getLocalStorage();
-  // });
+  useEffect(() => {
+    if (localStoragePageableVoteList) {
+      const totalPageCount = localStoragePageableVoteList.length;
+      setPageSize(totalPageCount);
+      setVoteList(localStoragePageableVoteList[0]);
+    }
+  }, []);
 
-  const handleUpVote = () => {
-    // console.log('handleupvote');
+  const handleUpVote = cardItem => {
+    const updatedVoteList = localStorageVoteList.map(item => {
+      if (item.id === cardItem.id) {
+        item.point += 1;
+      }
+      return item;
+    });
+    localStorage.setItem('voteList', JSON.stringify(updatedVoteList));
+    const updatedPageableVoteList = localStoragePageableVoteList[paginationActivePage - 1].map(
+      item => {
+        if (item.id === cardItem.id) {
+          item.point += 1;
+        }
+        return item;
+      },
+    );
+    const settableUpdatedPageableVoteList = localStoragePageableVoteList;
+    settableUpdatedPageableVoteList[paginationActivePage - 1] = updatedPageableVoteList;
+
+    localStorage.setItem('pageableVoteList', JSON.stringify(settableUpdatedPageableVoteList));
+    setVoteList(localStoragePageableVoteList[paginationActivePage - 1]);
   };
 
-  const handleDownVote = () => {
-    // console.log('handleDownvote');
+  const handleDownVote = cardItem => {
+    if (cardItem.point > 0) {
+      const updatedVoteList = localStorageVoteList.map(item => {
+        if (item.id === cardItem.id) {
+          item.point -= 1;
+        }
+        return item;
+      });
+      localStorage.setItem('voteList', JSON.stringify(updatedVoteList));
+
+      const updatedPageableVoteList = localStoragePageableVoteList[paginationActivePage - 1].map(
+        item => {
+          if (item.id === cardItem.id) {
+            item.point -= 1;
+          }
+          return item;
+        },
+      );
+
+      const settableUpdatedPageableVoteList = localStoragePageableVoteList;
+      settableUpdatedPageableVoteList[paginationActivePage - 1] = updatedPageableVoteList;
+
+      localStorage.setItem('pageableVoteList', JSON.stringify(settableUpdatedPageableVoteList));
+      setVoteList(localStoragePageableVoteList[paginationActivePage - 1]);
+    }
+  };
+
+  const handlePaginationChange = (e, { activePage }) => {
+    setActivePage(activePage);
+    setVoteList(localStoragePageableVoteList[activePage - 1]);
   };
 
   const { Content, Header, Meta } = Card;
@@ -47,7 +99,7 @@ export const ListContainer = () => {
                     <Button
                       basic
                       onClick={() => {
-                        handleUpVote();
+                        handleUpVote(cardItem);
                       }}
                     >
                       <Icon name="arrow up" />
@@ -56,7 +108,7 @@ export const ListContainer = () => {
                     <Button
                       basic
                       onClick={() => {
-                        handleDownVote();
+                        handleDownVote(cardItem);
                       }}
                     >
                       <Icon name="arrow down" />
@@ -68,6 +120,18 @@ export const ListContainer = () => {
             </Content>
           ))}
       </Card>
+      {totalCount > 1 ? (
+        <div className="text-align-center">
+          <Pagination
+            activePage={paginationActivePage}
+            // defaultActivePage={5}
+            totalPages={totalCount}
+            onPageChange={handlePaginationChange}
+          />
+        </div>
+      ) : (
+        ''
+      )}
     </section>
   );
 };

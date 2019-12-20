@@ -1,6 +1,9 @@
 .text-align-right {
   text-align: right;
 }
+.text-align-center {
+  text-align: center;
+}
 .text-align-flex {
   text-align: right;
 }
@@ -15,5 +18,11 @@
 .ui.card {
   width: 100%;
 }
-
 // Card
+//message
+.ui.message {
+  width: 400px;
+  top: 15px;
+  position: fixed;
+}
+//message
