@@ -94,7 +94,7 @@ export const AddVoteCardContainer = () => {
           <Button type="submit">ADD</Button>
         </Form>
       </div>
-      <Message success hidden={messageIsHidden} content={`${name} ADDED`} />
+      <Message success hidden={messageIsHidden} content={`${name.toUpperCase()} ADDED`} />
     </section>
   );
 };

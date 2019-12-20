@@ -1,6 +1,31 @@
 .cardContainer {
   width: 400px;
+  .ui.card {
+    width: 100%;
+    &:hover {
+      background-color: #f7f7f7;
+      .deleteButton {
+        display: block;
+      }
+    }
+  }
 
+  .deleteButton {
+    display: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+    font-size: 25px;
+    position: absolute;
+    top: -13px;
+    right: -25px;
+    color: red;
+    &:hover,
+    &:focus {
+      background: none;
+      color: red;
+    }
+  }
   .backgroundCover {
     width: 60px;
     height: 60px !important;
@@ -58,6 +83,18 @@
     }
     .header {
       font-size: 20px;
+    }
+  }
+}
+.deleteModal {
+  p {
+    margin: 0;
+    font-size: 25px;
+  }
+  span {
+    font: {
+      size: 25px;
+      weight: bold;
     }
   }
 }

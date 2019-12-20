@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Icon, Button, Pagination } from 'semantic-ui-react';
+import { Card, Icon, Button, Pagination, Modal } from 'semantic-ui-react';
 
 export const ListContainer = () => {
   const localStoragePageableVoteList = JSON.parse(window.localStorage.getItem('pageableVoteList'));
@@ -10,6 +10,9 @@ export const ListContainer = () => {
   const [voteList, setVoteList] = useState([]);
   const [totalCount, setPageSize] = useState('');
   const [paginationActivePage, setActivePage] = useState(1);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [cardName, setCardName] = useState('');
+  const [cardtobeDeleted, setCardtobeDeleted] = useState({});
 
   useEffect(() => {
     if (localStoragePageableVoteList) {
@@ -73,6 +76,17 @@ export const ListContainer = () => {
     setActivePage(activePage);
     setVoteList(localStoragePageableVoteList[activePage - 1]);
   };
+  const handleDeleteCard = () => {
+    console.log(cardtobeDeleted, 'cardtobeDeleted');
+  };
+  const handleOpenModal = cardItem => {
+    setModalIsOpen(true);
+    setCardtobeDeleted(cardItem);
+    setCardName(cardItem.name);
+  };
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
+  };
 
   const { Content, Header, Meta } = Card;
   return (
@@ -83,10 +97,20 @@ export const ListContainer = () => {
           SUBMIT A LINK
         </Link>
       </div>
-      <Card>
-        {voteList &&
-          voteList.map(cardItem => (
-            <Content key={cardItem.id}>
+
+      {voteList &&
+        voteList.map(cardItem => (
+          <Card key={cardItem.id}>
+            <Content>
+              <Button
+                className="deleteButton"
+                onClick={() => {
+                  handleOpenModal(cardItem);
+                }}
+              >
+                <Icon name="delete" />
+              </Button>
+
               <div className="cardListContent">
                 <div className="cardListContent_viotPoint backgroundCover">
                   <span>{cardItem.point}</span>
@@ -118,8 +142,8 @@ export const ListContainer = () => {
                 </div>
               </div>
             </Content>
-          ))}
-      </Card>
+          </Card>
+        ))}
       {totalCount > 1 ? (
         <div className="text-align-center">
           <Pagination
@@ -132,6 +156,21 @@ export const ListContainer = () => {
       ) : (
         ''
       )}
+      <Modal open={modalIsOpen} onClose={handleCloseModal} size="tiny">
+        <Modal.Header>REMOVE LINK</Modal.Header>
+        <Modal.Content>
+          <Modal.Description className="text-align-center deleteModal">
+            <p>Do you want to remove</p>
+            <span>{cardName.toUpperCase()}</span>
+          </Modal.Description>
+          <Button secondary onClick={handleCloseModal}>
+            close
+          </Button>
+          <Button secondary onClick={handleDeleteCard}>
+            Ok
+          </Button>
+        </Modal.Content>
+      </Modal>
     </section>
   );
 };
