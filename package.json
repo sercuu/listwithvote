@@ -54,6 +54,8 @@
     "@craco/craco": "^5.6.2",
     "@semantic-ui-react/craco-less": "^1.2.1",
     "babel-eslint": "^10.0.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
