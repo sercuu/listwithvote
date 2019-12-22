@@ -1,26 +1,45 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Icon, Button, Pagination, Modal } from 'semantic-ui-react';
+import { Card, Icon, Button, Pagination, Modal, Message, Select } from 'semantic-ui-react';
+import pagination from '../../helpers/pagination';
+
+const options = [
+  { key: 'mostVote', value: 'mostVote', text: 'Most Vote (Z>A)' },
+  { key: 'lessVote', value: 'lessVote', text: 'Less Vote (A>Z)' },
+];
+const PAGE_SIZE = 5;
 
 export const ListContainer = () => {
-  const localStoragePageableVoteList = JSON.parse(window.localStorage.getItem('pageableVoteList'));
   const localStorageVoteList = JSON.parse(window.localStorage.getItem('voteList'));
-
+  const [stateVoteList, setStateVoteList] = useState(localStorageVoteList);
   const [voteList, setVoteList] = useState([]);
   const [totalCount, setPageSize] = useState('');
   const [paginationActivePage, setActivePage] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [cardName, setCardName] = useState('');
-  const [cardtobeDeleted, setCardtobeDeleted] = useState({});
+  const [cardToBeDeleted, setCardToBeDeleted] = useState({});
+  const [messageIsHidden, setMessageIsHidden] = useState(true);
 
   useEffect(() => {
-    if (localStoragePageableVoteList) {
-      const totalPageCount = localStoragePageableVoteList.length;
-      setPageSize(totalPageCount);
-      setVoteList(localStoragePageableVoteList[0]);
+    if (localStorageVoteList) {
+      const calcTotalCount = Math.ceil(stateVoteList.length / PAGE_SIZE);
+      setPageSize(calcTotalCount);
+      const pageableVoteList = pagination(stateVoteList, PAGE_SIZE, 1);
+      setVoteList(pageableVoteList);
     }
   }, []);
+
+  useEffect(() => {
+    const recalcTotalCount = Math.ceil(stateVoteList.length / PAGE_SIZE);
+    const calcPageableVoteList = pagination(stateVoteList, PAGE_SIZE, paginationActivePage);
+    if (recalcTotalCount < totalCount && calcPageableVoteList.length === 0) {
+      const pageableVoteList = pagination(stateVoteList, PAGE_SIZE, recalcTotalCount);
+      setActivePage(recalcTotalCount);
+      setVoteList(pageableVoteList);
+    }
+    setPageSize(recalcTotalCount);
+  }, [stateVoteList]);
 
   const handleUpVote = cardItem => {
     const updatedVoteList = localStorageVoteList.map(item => {
@@ -30,19 +49,9 @@ export const ListContainer = () => {
       return item;
     });
     localStorage.setItem('voteList', JSON.stringify(updatedVoteList));
-    const updatedPageableVoteList = localStoragePageableVoteList[paginationActivePage - 1].map(
-      item => {
-        if (item.id === cardItem.id) {
-          item.point += 1;
-        }
-        return item;
-      },
-    );
-    const settableUpdatedPageableVoteList = localStoragePageableVoteList;
-    settableUpdatedPageableVoteList[paginationActivePage - 1] = updatedPageableVoteList;
-
-    localStorage.setItem('pageableVoteList', JSON.stringify(settableUpdatedPageableVoteList));
-    setVoteList(localStoragePageableVoteList[paginationActivePage - 1]);
+    const updatedPageableVoteList = pagination(updatedVoteList, PAGE_SIZE, paginationActivePage);
+    setVoteList(updatedPageableVoteList);
+    setStateVoteList(updatedVoteList);
   };
 
   const handleDownVote = cardItem => {
@@ -54,38 +63,55 @@ export const ListContainer = () => {
         return item;
       });
       localStorage.setItem('voteList', JSON.stringify(updatedVoteList));
-
-      const updatedPageableVoteList = localStoragePageableVoteList[paginationActivePage - 1].map(
-        item => {
-          if (item.id === cardItem.id) {
-            item.point -= 1;
-          }
-          return item;
-        },
-      );
-
-      const settableUpdatedPageableVoteList = localStoragePageableVoteList;
-      settableUpdatedPageableVoteList[paginationActivePage - 1] = updatedPageableVoteList;
-
-      localStorage.setItem('pageableVoteList', JSON.stringify(settableUpdatedPageableVoteList));
-      setVoteList(localStoragePageableVoteList[paginationActivePage - 1]);
+      const updatedPageableVoteList = pagination(updatedVoteList, PAGE_SIZE, paginationActivePage);
+      setVoteList(updatedPageableVoteList);
+      setStateVoteList(updatedVoteList);
     }
   };
 
   const handlePaginationChange = (e, { activePage }) => {
+    const pageableVoteList = pagination(stateVoteList, PAGE_SIZE, activePage);
+    setVoteList(pageableVoteList);
     setActivePage(activePage);
-    setVoteList(localStoragePageableVoteList[activePage - 1]);
   };
-  const handleDeleteCard = () => {
-    console.log(cardtobeDeleted, 'cardtobeDeleted');
-  };
+
   const handleOpenModal = cardItem => {
     setModalIsOpen(true);
-    setCardtobeDeleted(cardItem);
+    setCardToBeDeleted(cardItem);
     setCardName(cardItem.name);
   };
+
   const handleCloseModal = () => {
     setModalIsOpen(false);
+  };
+
+  const handleDeleteCard = () => {
+    const cleanVoteList = stateVoteList.filter(item => item.id !== cardToBeDeleted.id);
+    const pagealbeCleanVoteList = pagination(cleanVoteList, PAGE_SIZE, paginationActivePage);
+    localStorage.setItem('voteList', JSON.stringify(cleanVoteList));
+    setVoteList(pagealbeCleanVoteList);
+    setStateVoteList(cleanVoteList);
+    handleCloseModal();
+    setMessageIsHidden(false);
+    setTimeout(() => {
+      setMessageIsHidden(true);
+    }, 1000);
+  };
+
+  const handleResortByVotePoint = (e, { value }) => {
+    if (value === 'mostVote') {
+      const mostVoteList = stateVoteList.sort((a, b) => {
+        return b.point - a.point;
+      });
+      const sortedByMostVoteList = pagination(mostVoteList, PAGE_SIZE, paginationActivePage);
+      setVoteList(sortedByMostVoteList);
+    } else if (value === 'lessVote') {
+      const lessVoteList = stateVoteList.sort((a, b) => {
+        return a.point - b.point;
+      });
+      const sortedByLessVoteList = pagination(lessVoteList, PAGE_SIZE, paginationActivePage);
+      setVoteList(sortedByLessVoteList);
+    }
   };
 
   const { Content, Header, Meta } = Card;
@@ -97,7 +123,9 @@ export const ListContainer = () => {
           SUBMIT A LINK
         </Link>
       </div>
-
+      <div>
+        <Select placeholder="Order by" options={options} onChange={handleResortByVotePoint} />
+      </div>
       {voteList &&
         voteList.map(cardItem => (
           <Card key={cardItem.id}>
@@ -156,21 +184,24 @@ export const ListContainer = () => {
       ) : (
         ''
       )}
-      <Modal open={modalIsOpen} onClose={handleCloseModal} size="tiny">
+      <Modal open={modalIsOpen} onClose={handleCloseModal} size="tiny" closeIcon>
         <Modal.Header>REMOVE LINK</Modal.Header>
         <Modal.Content>
           <Modal.Description className="text-align-center deleteModal">
             <p>Do you want to remove</p>
             <span>{cardName.toUpperCase()}</span>
           </Modal.Description>
-          <Button secondary onClick={handleCloseModal}>
-            close
-          </Button>
-          <Button secondary onClick={handleDeleteCard}>
-            Ok
-          </Button>
+          <div className="text-align-center deleteModal_actions">
+            <Button size="large" secondary onClick={handleCloseModal}>
+              CLOSE
+            </Button>
+            <Button size="large" secondary onClick={handleDeleteCard}>
+              OK
+            </Button>
+          </div>
         </Modal.Content>
       </Modal>
+      <Message success hidden={messageIsHidden} content={`${cardName.toUpperCase()} REMOVED.`} />
     </section>
   );
 };

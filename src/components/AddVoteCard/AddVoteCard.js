@@ -1,14 +1,20 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import uuid from 'uuid';
 import { Icon, Button, Form, Input, Message } from 'semantic-ui-react';
+import * as ValidationController from '../../helpers/validation';
 
 export const AddVoteCardContainer = () => {
   const [name, setName] = useState('');
   const [path, setPath] = useState('');
-  const [messageIsHidden, setmessageIsHidden] = useState(true);
+  const [messageIsHidden, setMessageIsHidden] = useState(true);
+  const [addButtonIsDisalbe, setAddButtonIsDisalbe] = useState(true);
+  const [formIsValid, setFormIsValid] = useState(false);
 
+  useEffect(() => {
+    setAddButtonIsDisalbe(false);
+  }, [name, path]);
   const handleNameChange = e => {
     setName(e.target.value);
   };
@@ -26,36 +32,35 @@ export const AddVoteCardContainer = () => {
   };
 
   const handleSubmit = () => {
+    setFormIsValid(false);
     const localStorageVoteList = JSON.parse(localStorage.getItem('voteList'));
-    const voteList = [
-      {
-        name,
-        path,
-        id: uuid(),
-        point: 0,
-      },
-      ...(localStorageVoteList !== null ? localStorageVoteList : []),
-    ];
-    localStorage.setItem('voteList', JSON.stringify(voteList));
-
-    let i;
-    let j;
-    let temparray;
-    const chunk = 5;
-    const pageableVoteList = [];
-    for (i = 0, j = voteList.length; i < j; i += chunk) {
-      temparray = voteList.slice(i, i + chunk);
-      pageableVoteList.push(temparray);
-    }
-    asyncLocalStorage.setItem('pageableVoteList', JSON.stringify(pageableVoteList)).then(() => {
-      setmessageIsHidden(false);
-      // close message & reset state with setTimeout
-      setTimeout(() => {
-        setmessageIsHidden(true);
-        setName('');
-        setPath('');
-      }, 1000);
+    const validationRules = ValidationController.schema({
+      name: [ValidationController.string(), ValidationController.minLength(1)],
+      path: [ValidationController.string(), ValidationController.minLength(1)],
     });
+    const isValid = ValidationController.validate({ name, path }, validationRules);
+    if (isValid) {
+      const voteList = [
+        {
+          name,
+          path,
+          id: uuid(),
+          point: 0,
+        },
+        ...(localStorageVoteList !== null ? localStorageVoteList : []),
+      ];
+      asyncLocalStorage.setItem('voteList', JSON.stringify(voteList)).then(() => {
+        setMessageIsHidden(false);
+        // close message & reset state with setTimeout
+        setTimeout(() => {
+          setMessageIsHidden(true);
+          setName('');
+          setPath('');
+        }, 1000);
+      });
+    } else {
+      setFormIsValid(true);
+    }
   };
 
   return (
@@ -91,7 +96,11 @@ export const AddVoteCardContainer = () => {
               onChange={handlePathChange}
             />
           </label>
-          <Button type="submit">ADD</Button>
+          {formIsValid ? <p className="error">Lütfen boş alanları doldurunuz.</p> : ''}
+
+          <Button disabled={addButtonIsDisalbe} type="submit">
+            ADD
+          </Button>
         </Form>
       </div>
       <Message success hidden={messageIsHidden} content={`${name.toUpperCase()} ADDED`} />

@@ -24,5 +24,23 @@
   width: 400px;
   top: 15px;
   position: fixed;
+  text-align: center;
+  font-size: 25px;
 }
 //message
+.ui.modal {
+  .header {
+    background-color: black;
+    color: white;
+  }
+  .content {
+    background-color: #c1c1c1;
+  }
+}
+//message
+
+.validationController {
+  input {
+    border-color: red !important;
+  }
+}
