@@ -31,7 +31,7 @@ export const ListContainer = () => {
   }, []);
 
   useEffect(() => {
-    const recalcTotalCount = Math.ceil(stateVoteList.length / PAGE_SIZE);
+    const recalcTotalCount = stateVoteList && Math.ceil(stateVoteList.length / PAGE_SIZE);
     const calcPageableVoteList = pagination(stateVoteList, PAGE_SIZE, paginationActivePage);
     if (recalcTotalCount < totalCount && calcPageableVoteList.length === 0) {
       const pageableVoteList = pagination(stateVoteList, PAGE_SIZE, recalcTotalCount);
@@ -123,7 +123,7 @@ export const ListContainer = () => {
           SUBMIT A LINK
         </Link>
       </div>
-      <div>
+      <div className="cardContainer_select">
         <Select placeholder="Order by" options={options} onChange={handleResortByVotePoint} />
       </div>
       {voteList &&

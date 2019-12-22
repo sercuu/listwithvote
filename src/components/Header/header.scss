@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: center;
+  &_container {
+    width: 1100px;
+    border-bottom: 1px solid #000;
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    margin: 20px 0;
+  }
+}
