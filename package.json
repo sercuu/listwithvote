@@ -13,8 +13,9 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+    "semantic-ui-less": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
-    "semantic-ui-less": "^2.4.1"
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "craco start",
@@ -53,6 +54,8 @@
     "@craco/craco": "^5.6.2",
     "@semantic-ui-react/craco-less": "^1.2.1",
     "babel-eslint": "^10.0.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",

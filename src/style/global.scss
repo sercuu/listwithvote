@@ -1,6 +1,9 @@
 .text-align-right {
   text-align: right;
 }
+.text-align-center {
+  text-align: center;
+}
 .text-align-flex {
   text-align: right;
 }
@@ -15,5 +18,29 @@
 .ui.card {
   width: 100%;
 }
-
 // Card
+//message
+.ui.message {
+  width: 400px;
+  top: 15px;
+  position: fixed;
+  text-align: center;
+  font-size: 25px;
+}
+//message
+.ui.modal {
+  .header {
+    background-color: black;
+    color: white;
+  }
+  .content {
+    background-color: #c1c1c1;
+  }
+}
+//message
+
+.validationController {
+  input {
+    border-color: red !important;
+  }
+}
