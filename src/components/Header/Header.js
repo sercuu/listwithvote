@@ -1,17 +1,13 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
 
 export const Header = () => {
-  const { Row, Column } = Grid;
   return (
-    <Grid columns={16}>
-      <Row>
-        <Column width={8}>Logo</Column>
-        <Column width={8} className="text-align-right">
-          LinkVOTE Challenge
-        </Column>
-      </Row>
-    </Grid>
+    <div className="header">
+      <div className="header_container">
+        <p>Hepsiburada.com</p>
+        <p>LinkVOTE Challenge</p>
+      </div>
+    </div>
   );
 };
 export default Header;
